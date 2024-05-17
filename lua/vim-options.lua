@@ -5,6 +5,7 @@ vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.g.mapleader = " "
+vim.opt.guicursor = ""
 
 -- Navigate vim panes better
 vim.keymap.set("n", "<C-j>", "<C-w>j<CR>")
