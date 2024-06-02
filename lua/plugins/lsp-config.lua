@@ -7,6 +7,9 @@ return {
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
+    opts = {
+      auto_install = true,
+    },
 		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = {
@@ -15,6 +18,7 @@ return {
 					"html",
 					"tailwindcss",
 					"gopls",
+          "biome"
 				},
 			})
 		end,
@@ -56,6 +60,10 @@ return {
 						},
 					},
 				},
+			})
+
+			lspconfig.biome.setup({
+				capabilities = capabilities,
 			})
 
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
