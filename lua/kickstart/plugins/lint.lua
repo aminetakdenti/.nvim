@@ -4,6 +4,19 @@ return {
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
+      local cwd = vim.uv.cwd()
+      local exist = false
+
+      if cwd ~= nil then
+        local dirTable = vim.split(cwd, '/')
+        for i = 1, #dirTable do
+          if dirTable[i] == 'developatic' then
+            exist = true
+            break
+          end
+        end
+      end
+
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
@@ -54,8 +67,13 @@ return {
           -- Only run the linter in buffers that you can modify in order to
           -- avoid superfluous noise, notably within the handy LSP pop-ups that
           -- describe the hovered symbol using Markdown.
-          if vim.opt_local.modifiable:get() then
+          if vim.opt_local.modifiable:get() and not exist then
+            print 'linting is on'
             lint.try_lint()
+          else
+            if exist then
+              print 'linting is off because we are under developatic folder'
+            end
           end
         end,
       })

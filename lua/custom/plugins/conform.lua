@@ -3,7 +3,6 @@ return {
     'stevearc/conform.nvim',
     opts = {},
     config = function()
-      print 'lunch'
       require('conform').setup {
         formatters_by_ft = {
           lua = { 'stylua' },
@@ -18,6 +17,7 @@ return {
           typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         },
       }
+
       vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = '*',
         callback = function(args)
