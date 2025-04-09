@@ -163,6 +163,16 @@ vim.opt.confirm = true
 
 vim.opt.statusline = '%<%f %h%m%r%=%-14.(%l,%c%V%) %P'
 
+-- folding
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldenable = false -- Start with folds open
+vim.opt.foldlevel = 99 -- Close only very nested folds
+vim.opt.foldcolumn = '1' -- Show a column for folds (adjust width as needed)
+vim.opt.fillchars:append { fold = ' ', foldopen = '▾', foldsep = '│', foldclose = '▸' }
+-- Make fold text more informative
+vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').' ... '.trim(getline(v:foldend))]]
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -634,25 +644,25 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = false,
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   event = { 'BufWritePre' },
+  --   cmd = { 'ConformInfo' },
+  --   keys = {
+  --     -- {
+  --     --   '<leader>f',
+  --     --   function()
+  --     --     require('conform').format { async = true, lsp_format = 'fallback' }
+  --     --   end,
+  --     --   mode = '',
+  --     --   desc = '[F]ormat buffer',
+  --     -- },
+  --   },
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = false,
+  --   },
+  -- },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -855,6 +865,7 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      fold = { enable = true },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -930,6 +941,23 @@ require('lazy').setup({
     event = 'BufReadPre',
     opts = { -- set to setup table
     },
+  },
+  {
+    'tpope/vim-vinegar',
+  },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+    config = function()
+      require('oil').setup()
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the

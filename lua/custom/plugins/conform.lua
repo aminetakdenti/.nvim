@@ -1,8 +1,12 @@
 return {
   {
     'stevearc/conform.nvim',
-    opts = {},
+    opts = {
+      format_on_save = null,
+    },
     config = function()
+      local path_utils = require 'utils.path'
+
       require('conform').setup {
         formatters_by_ft = {
           lua = { 'stylua' },
@@ -21,11 +25,13 @@ return {
       vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = '*',
         callback = function(args)
-          require('conform').format { bufnr = args.buf }
+          if not path_utils.is_developatic_dir() then
+            require('conform').format { bufnr = args.buf }
+          end
         end,
       })
 
-      vim.keymap.set('n', '<leader>lf', function()
+      vim.keymap.set('n', '<leader>f', function()
         require('conform').format { async = true, lsp_fallback = true }
       end, { desc = 'Format file with Conform' })
     end,
