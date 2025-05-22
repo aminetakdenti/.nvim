@@ -1,5 +1,15 @@
 -- Neo-tree is a Neovim plugin to browse the file system
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
+-- -- NeoTree background color customizations
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = '*',
+  callback = function()
+    vim.cmd 'highlight NeoTreeNormal guibg=#000000' -- Modify this to your preferred color
+    vim.cmd 'highlight NeoTreeNormalNC guibg=#000000' -- Modify this to your preferred color
+    vim.cmd 'highlight NeoTreeEndOfBuffer guibg=#000000' -- Modify this to your preferred color
+    vim.cmd 'highlight NeoTreeWinSeparator guibg=#000000 guifg=#222222'
+  end,
+})
 
 return {
   'nvim-neo-tree/neo-tree.nvim',

@@ -1,3 +1,16 @@
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = '*',
+  callback = function()
+    -- Telescope
+    vim.cmd 'highlight TelescopeNormal guibg=#000000'
+    vim.cmd 'highlight TelescopeBorder guibg=#000000 guifg=#444444'
+    vim.cmd 'highlight TelescopePromptNormal guibg=#000000'
+    vim.cmd 'highlight TelescopePromptBorder guibg=#000000 guifg=#444444'
+    vim.cmd 'highlight TelescopeResultsNormal guibg=#000000'
+    vim.cmd 'highlight TelescopeResultsBorder guibg=#000000 guifg=#444444'
+  end,
+})
+
 return { -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
   event = 'VimEnter',
