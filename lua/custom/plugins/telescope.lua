@@ -1,16 +1,3 @@
-vim.api.nvim_create_autocmd('ColorScheme', {
-  pattern = '*',
-  callback = function()
-    -- Telescope
-    vim.cmd 'highlight TelescopeNormal guibg=#000000'
-    vim.cmd 'highlight TelescopeBorder guibg=#000000 guifg=#444444'
-    vim.cmd 'highlight TelescopePromptNormal guibg=#000000'
-    vim.cmd 'highlight TelescopePromptBorder guibg=#000000 guifg=#444444'
-    vim.cmd 'highlight TelescopeResultsNormal guibg=#000000'
-    vim.cmd 'highlight TelescopeResultsBorder guibg=#000000 guifg=#444444'
-  end,
-})
-
 return { -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
   event = 'VimEnter',
@@ -20,7 +7,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     { 'nvim-telescope/telescope-ui-select.nvim' },
     -- { 'nvim-tree/nvim-web-devicons' },
-    { 'echasnovski/mini.icons', version = '*' },
+    { 'echasnovski/mini.icons',                   version = '*' },
   },
   config = function()
     require('mini.icons').setup()
@@ -92,7 +79,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<leader>st', function()
       require('telescope.builtin').live_grep {
         prompt_title = '🔍 TODOs & FIXMEs',
-        grep_open_files = true, -- search in open files first
+        grep_open_files = true,                               -- search in open files first
         search = [[\b(TODO|FIXME|NOTE|OPTIMIZE|HACK|BUG)\b]], -- regex pattern
       }
     end, { desc = 'Find TODOs in code' })

@@ -79,8 +79,8 @@ vim.opt.statusline = '%<%f %h%m%r%=%-14.(%l,%c%V%) %P'
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.foldenable = false -- Start with folds open
-vim.opt.foldlevel = 99 -- Close only very nested folds
-vim.opt.foldcolumn = '1' -- Show a column for folds (adjust width as needed)
+vim.opt.foldlevel = 99     -- Close only very nested folds
+vim.opt.foldcolumn = '1'   -- Show a column for folds (adjust width as needed)
 vim.opt.fillchars:append { fold = ' ', foldopen = '▾', foldsep = '│', foldclose = '▸' }
 -- Make fold text more informative
 vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').' ... '.trim(getline(v:foldend))]]
@@ -218,7 +218,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -264,7 +264,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -307,7 +307,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -536,22 +536,27 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+      -- Set up mason-lspconfig with minimal configuration to avoid automatic_enable issues
+      local mason_lspconfig = require('mason-lspconfig')
+      mason_lspconfig.setup {
+        ensure_installed = vim.tbl_keys(servers or {}),
       }
+
+      -- Manually configure each server
+      for server_name, server_config in pairs(servers) do
+        -- This handles overriding only values explicitly passed
+        -- by the server configuration above. Useful when disabling
+        -- certain features of an LSP (for example, turning off formatting for ts_ls)
+        server_config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server_config.capabilities or {})
+
+        -- Safety check to ensure lspconfig has the server configuration
+        local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
+        if lspconfig_ok and lspconfig[server_name] then
+          lspconfig[server_name].setup(server_config)
+        else
+          vim.notify('LSP server ' .. server_name .. ' not found in lspconfig', vim.log.levels.WARN)
+        end
+      end
     end,
   },
 
@@ -609,10 +614,10 @@ require('lazy').setup({
               -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
               -- can also be a function to dynamically calculate max width such as
               -- menu = function() return math.floor(0.45 * vim.o.columns) end,
-              menu = 50, -- leading text (labelDetails)
-              abbr = 50, -- actual suggestion item
+              menu = 50,              -- leading text (labelDetails)
+              abbr = 50,              -- actual suggestion item
             },
-            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+            ellipsis_char = '...',    -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
             show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 
             -- The function below will be called before any actual modifications from lspkind
@@ -723,15 +728,15 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
-        style = 'storm', -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-        transparent = true, -- Enable this to disable setting the background color
+        style = 'storm',        -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+        transparent = true,     -- Enable this to disable setting the background color
         terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
         styles = {
           -- Style to be applied to different syntax groups
           -- Value is any valid attr-list value for `:help nvim_set_hl`
           -- Background styles. Can be "dark", "transparent" or "normal"
-          sidebars = 'dark', -- style for sidebars, see below
-          floats = 'dark', -- style for floating windows
+          sidebars = 'dark',            -- style for sidebars, see below
+          floats = 'dark',              -- style for floating windows
           comments = { italic = true }, -- Disable italics in comments
         },
       }
@@ -801,11 +806,11 @@ require('lazy').setup({
         },
         -- you can enable a preset for easier configuration
         presets = {
-          bottom_search = true, -- use a classic bottom cmdline for search
-          command_palette = false, -- position the cmdline and popupmenu together
+          bottom_search = true,         -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
           long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = true, -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = true, -- add a border to hover docs and signature help
+          inc_rename = true,            -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = true,        -- add a border to hover docs and signature help
         },
       }
     end,

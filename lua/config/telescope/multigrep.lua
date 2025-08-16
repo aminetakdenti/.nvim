@@ -39,14 +39,14 @@ local search_multigrep = function(opts)
   }
 
   pickers
-    .new(opts, {
-      debounce = 100,
-      prompt_title = 'Multi Grep',
-      finder = finder,
-      previewer = conf.grep_previewer(opts),
-      sorter = require('telescope.sorters').empty(),
-    })
-    :find()
+      .new(opts, {
+        debounce = 100,
+        prompt_title = 'Multi Grep',
+        finder = finder,
+        previewer = conf.grep_previewer(opts),
+        sorter = require('telescope.sorters').empty(),
+      })
+      :find()
 end
 
 M.setup = function()
