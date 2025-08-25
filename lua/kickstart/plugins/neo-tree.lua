@@ -1,6 +1,3 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
--- -- NeoTree background color customizations
 return {
   'nvim-neo-tree/neo-tree.nvim',
   branch = 'v3.x',
@@ -12,7 +9,7 @@ return {
   },
   cmd = 'Neotree',
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '<leader>e', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
   },
   config = function()
     require('mini.icons').setup()
@@ -22,7 +19,7 @@ return {
     filesystem = {
       window = {
         mappings = {
-          ['\\'] = 'close_window',
+          ['<leader>e'] = 'close_window',
         },
         ['P'] = {
           'toggle_preview',
