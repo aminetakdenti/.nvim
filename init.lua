@@ -273,7 +273,17 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        -- pyright = {},
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                typeCheckingMode = "basic", -- change to "strict" if you want more checks
+              },
+            },
+          },
+        },
         -- rust_analyzer = {},
         ts_ls = {},
         lua_ls = {
@@ -359,6 +369,7 @@ require('lazy').setup({
             ellipsis_char = '...',
             show_labelDetails = true,
 
+            symbol_map = { Codeium = "", },
             before = require("tailwind-tools.cmp").lspkind_format,
           },
         },
@@ -410,6 +421,7 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
+          { name = "codeium" },
         },
         window = {
           completion = {
