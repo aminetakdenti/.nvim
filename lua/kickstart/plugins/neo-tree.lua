@@ -17,6 +17,11 @@ return {
   end,
   opts = {
     filesystem = {
+      -- ADD THIS SECTION
+      filtered_items = {
+        hide_dotfiles = false,
+        hide_gitignored = false,
+      },
       window = {
         mappings = {
           ['<leader>e'] = 'close_window',

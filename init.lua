@@ -6,6 +6,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
+vim.opt.swapfile = false
 
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
@@ -20,7 +21,7 @@ vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.list = true
-vim.opt.listchars = { trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
@@ -358,9 +359,7 @@ require('lazy').setup({
             ellipsis_char = '...',
             show_labelDetails = true,
 
-            before = function(entry, vim_item)
-              return vim_item
-            end,
+            before = require("tailwind-tools.cmp").lspkind_format,
           },
         },
 
@@ -430,7 +429,7 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
-        style = 'night',
+        style = 'storm',
         transparent = true,
         terminal_colors = true,
         styles = {
@@ -511,6 +510,17 @@ require('lazy').setup({
   },
   {
     'tpope/vim-vinegar',
+  },
+  {
+    "Exafunction/windsurf.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    config = function()
+      require("codeium").setup({
+      })
+    end
   },
 
   require 'kickstart.plugins.debug',
