@@ -82,13 +82,6 @@ require('lazy').setup({
   'tpope/vim-sleuth',
   {
     'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup({
-      })
-    end,
-  },
-  {
-    'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
         add = { text = '+' },
@@ -273,17 +266,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                typeCheckingMode = "basic", -- change to "strict" if you want more checks
-              },
-            },
-          },
-        },
+        -- pyright = {},
         -- rust_analyzer = {},
         ts_ls = {},
         lua_ls = {
@@ -296,7 +279,7 @@ require('lazy').setup({
                 callSnippet = 'Replace',
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -442,8 +425,6 @@ require('lazy').setup({
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
         style = 'storm',
-        transparent = true,
-        terminal_colors = true,
         styles = {
           comments = { italic = true },
         },
