@@ -6,7 +6,7 @@ return {
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       { 'hrsh7th/cmp-nvim-lsp' },
-      { 'saghen/blink.cmp',        opts = {} }, -- Blink completion
+      { 'saghen/blink.cmp', opts = {} }, -- Blink completion
     },
     config = function()
       -- LSP capabilities for nvim-cmp
@@ -29,12 +29,12 @@ return {
       end
 
       -- Configure diagnostics
-      vim.diagnostic.config({
+      vim.diagnostic.config {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
         underline = true,
         virtual_text = { spacing = 2, source = 'if_many' },
-      })
+      }
 
       -- LSP servers list
       local servers = {
@@ -49,29 +49,40 @@ return {
         },
         ts_ls = {}, -- modern name for tsserver
         gopls = {},
+        tailwindcss = {
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  '^containerClassName\\s*=\\s*{?\\s*[`"]([^"\'`]+)["\'`]\\s*}?$',
+                },
+              },
+            },
+          },
+        },
       }
 
       -- Mason setup
       require('mason').setup()
-      require('mason-lspconfig').setup({
+      require('mason-lspconfig').setup {
         ensure_installed = vim.tbl_keys(servers),
-      })
+      }
 
       for _, name in ipairs(servers) do
-        vim.lsp.config[name].setup({
+        vim.lsp.config[name].setup {
           on_attach = on_attach,
           capabilities = capabilities,
-        })
+        }
       end
 
       -- Setup Blink completion UI
       local blink_ok, blink = pcall(require, 'blink.cmp')
       if blink_ok then
-        blink.setup({
+        blink.setup {
           highlight_current_item = true,
           show_hover = true,
           show_diagnostics = true,
-        })
+        }
       end
     end,
   },

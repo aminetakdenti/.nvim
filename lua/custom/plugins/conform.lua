@@ -1,21 +1,21 @@
 return {
   {
-    "stevearc/conform.nvim",
+    'stevearc/conform.nvim',
     config = function()
       local function get_js_formatter()
         local cwd = vim.fn.getcwd()
-        if vim.fn.filereadable(cwd .. "/biome.json") == 1 then
-          return { "biome" }
+        if vim.fn.filereadable(cwd .. '/biome.json') == 1 then
+          return { 'biome' }
         else
-          return { "prettier" }
+          return { 'prettier' }
         end
       end
 
-      require("conform").setup {
+      require('conform').setup {
         formatters_by_ft = {
-          lua = { "stylua" },
-          python = { "isort", "black" },
-          rust = { "rustfmt" },
+          lua = { 'stylua' },
+          python = { 'isort', 'black' },
+          rust = { 'rustfmt' },
           javascript = get_js_formatter,
           javascriptreact = get_js_formatter,
           typescript = get_js_formatter,
@@ -29,11 +29,10 @@ return {
           scss = get_js_formatter,
         },
         format_on_save = nil,
-        format_after_save = nil
       }
-      vim.keymap.set("n", "<leader>fm", function()
-        require("conform").format { async = true, lsp_fallback = true }
-      end, { desc = "Format file with Conform" })
+      vim.keymap.set('n', '<leader>fm', function()
+        require('conform').format { async = true, lsp_fallback = true }
+      end, { desc = 'Format file with Conform' })
     end,
   },
 }
