@@ -37,8 +37,8 @@ vim.opt.statusline = '%<%f %h%m%r%=%-14.(%l,%c%V%) %P'
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.foldenable = false -- Start with folds open
-vim.opt.foldlevel = 99     -- Close only very nested folds
-vim.opt.foldcolumn = '1'   -- Show a column for folds (adjust width as needed)
+vim.opt.foldlevel = 99 -- Close only very nested folds
+vim.opt.foldcolumn = '1' -- Show a column for folds (adjust width as needed)
 vim.opt.fillchars:append { fold = ' ', foldopen = '▾', foldsep = '│', foldclose = '▸' }
 vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').' ... '.trim(getline(v:foldend))]]
 
@@ -140,7 +140,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -183,12 +183,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -234,8 +234,8 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = true, auto_show_delay_ms = 500, window = { border = "rounded" } },
-        menu = { border = "rounded" }
+        documentation = { auto_show = true, auto_show_delay_ms = 500, window = { border = 'rounded' } },
+        menu = { border = 'rounded' },
       },
 
       sources = {
@@ -280,19 +280,19 @@ require('lazy').setup({
 
   { 'tpope/vim-surround' },
   {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = "VimEnter",
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    event = 'VimEnter',
     opts = {
-      ensure_installed = { "bash", "c", "diff", "html", "lua", "luadoc", "markdown", "markdown_inline", "query", "vim", "vimdoc" },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       auto_install = true,
       highlight = {
         enable = true,
-        additional_vim_regex_highlighting = { "ruby" },
+        additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = {
         enable = true,
-        disable = { "ruby" },
+        disable = { 'ruby' },
       },
     },
   },
@@ -300,8 +300,7 @@ require('lazy').setup({
   {
     'folke/noice.nvim',
     event = 'VeryLazy',
-    opts = {
-    },
+    opts = {},
     dependencies = {
       'MunifTanjim/nui.nvim',
       'rcarriga/nvim-notify',
@@ -343,22 +342,20 @@ require('lazy').setup({
   {
     'catgoose/nvim-colorizer.lua',
     event = 'BufReadPre',
-    opts = {
-    },
+    opts = {},
   },
   {
     'tpope/vim-vinegar',
   },
   {
-    "Exafunction/windsurf.nvim",
+    'Exafunction/windsurf.nvim',
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
+      'nvim-lua/plenary.nvim',
+      'hrsh7th/nvim-cmp',
     },
     config = function()
-      require("codeium").setup({
-      })
-    end
+      require('codeium').setup {}
+    end,
   },
 
   require 'kickstart.plugins.debug',
@@ -388,4 +385,3 @@ require('lazy').setup({
     },
   },
 })
-

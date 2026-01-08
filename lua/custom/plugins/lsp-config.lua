@@ -68,11 +68,14 @@ return {
         ensure_installed = vim.tbl_keys(servers),
       }
 
-      for _, name in ipairs(servers) do
-        vim.lsp.config[name].setup {
+      require 'lspconfig'
+
+      for name, config in pairs(servers) do
+        vim.lsp.config(name, {
           on_attach = on_attach,
           capabilities = capabilities,
-        }
+          settings = config.settings,
+        })
       end
 
       -- Setup Blink completion UI
