@@ -4,6 +4,9 @@ vim.treesitter.language.get_lang = vim.treesitter.language.get_lang or function(
   return ft
 end
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.g.maplocalleader = ' '
 
 vim.g.have_nerd_font = true
@@ -36,9 +39,9 @@ vim.opt.statusline = '%<%f %h%m%r%=%-14.(%l,%c%V%) %P'
 -- folding
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.opt.foldenable = false -- Start with folds open
-vim.opt.foldlevel = 99 -- Close only very nested folds
-vim.opt.foldcolumn = '1' -- Show a column for folds (adjust width as needed)
+vim.opt.foldenable = true -- Start with folds open
+vim.opt.foldlevel = 99    -- Close only very nested folds
+vim.opt.foldcolumn = '1'  -- Show a column for folds (adjust width as needed)
 vim.opt.fillchars:append { fold = ' ', foldopen = '▾', foldsep = '│', foldclose = '▸' }
 vim.opt.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').' ... '.trim(getline(v:foldend))]]
 
@@ -68,6 +71,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  callback = function()
+    -- Check if treesitter is active for the current buffer
+    local ok, _ = pcall(vim.treesitter.get_parser)
+    if ok then
+      vim.opt_local.foldmethod = "expr"
+      vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    else
+      vim.opt_local.foldmethod = "indent"
+    end
   end,
 })
 
@@ -140,7 +156,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -261,19 +277,38 @@ require('lazy').setup({
     },
   },
 
+  --[[ { ]]
+  --[[   'folke/tokyonight.nvim', ]]
+  --[[   priority = 1000, ]]
+  --[[   config = function() ]]
+  --[[     ---@diagnostic disable-next-line: missing-fields ]]
+  --[[     require('tokyonight').setup { ]]
+  --[[       style = 'storm', ]]
+  --[[       styles = { ]]
+  --[[         comments = { italic = true }, ]]
+  --[[       }, ]]
+  --[[     } ]]
+  --[[     vim.cmd.colorscheme 'tokyonight-night' ]]
+  --[[   end, ]]
+  --[[ }, ]]
+
   {
-    'folke/tokyonight.nvim',
+    'sainnhe/gruvbox-material',
+    lazy = false,
     priority = 1000,
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        style = 'storm',
-        styles = {
-          comments = { italic = true },
-        },
-      }
-      vim.cmd.colorscheme 'tokyonight-night'
-    end,
+      -- Optionally configure and load the colorscheme
+      -- directly inside the plugin declaration.
+      vim.o.background = "dark"
+
+      vim.g.gruvbox_material_background = "hard"
+      vim.g.gruvbox_material_enable_italic = true
+      vim.g.gruvbox_material_enable_bold = true
+      vim.g.gruvbox_material_float_style = "dim"
+
+
+      vim.cmd.colorscheme('gruvbox-material')
+    end
   },
 
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -282,9 +317,9 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    event = 'VimEnter',
+    event = { 'BufReadPost', 'BufNewFile' }, -- Trigger earlier than VimEnter
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'tsx', 'jsx' },
       auto_install = true,
       highlight = {
         enable = true,
@@ -322,6 +357,10 @@ require('lazy').setup({
           lsp_doc_border = true,
         },
       }
+
+      require("notify").setup({
+        background_colour = "#000000",
+      })
     end,
   },
 
@@ -351,10 +390,26 @@ require('lazy').setup({
     'Exafunction/windsurf.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'hrsh7th/nvim-cmp',
     },
     config = function()
-      require('codeium').setup {}
+      require('codeium').setup({
+        enable_cmp_source = false, -- important when NOT using nvim-cmp
+        virtual_text = {
+          enabled = true,
+        },
+      })
+    end,
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    config = function()
+      require('nvim-ts-autotag').setup({
+        opts = {
+          enable_close = true,         -- Auto close tags
+          enable_rename = true,        -- Auto rename pairs of tags
+          enable_close_on_slash = false, -- Auto close on trailing </
+        },
+      })
     end,
   },
 

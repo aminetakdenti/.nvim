@@ -48,7 +48,7 @@ return {
           },
         },
         ts_ls = {}, -- modern name for tsserver
-        gopls = {},
+        -- gopls = {},
         tailwindcss = {
           settings = {
             tailwindCSS = {
